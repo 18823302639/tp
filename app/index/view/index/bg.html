@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+
+
+
+      {php}
+
+        shuffle($arr);
+
+        for($i=0;$i<count($arr);$i++){
+
+          if($i%12==0){
+            echo "<br>";
+          }
+
+          echo $arr[$i]['usname']." ";
+
+        }
+
+      {/php}
+
+
+
+
+    <a href="{:url('Index/daochu')}">点击导出</a>
+
+  </body>
+</html>

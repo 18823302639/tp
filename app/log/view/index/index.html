@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <link rel="stylesheet" type="text/css" media="screen" href="https://cdn.bootcss.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"  crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"  crossorigin="anonymous">
+  </head>
+  <body>
+
+      <div class="container">
+
+        <div class="row" style="margin-top:50px;">
+
+          <div class="col-xs-8">
+              <div class="thumbnail">
+                <div class="page-header"></div>
+                <p class="">
+                  12-31ThinkPHPV5.1.0018
+                  05-25[  ]
+                </p>
+                {volist name="res" id="vo"}
+                  <a href="{:url('index/contn','id'."=".$vo.id)}">
+                    <p class="">
+                      {$vo.fid}
+                      {$vo.ftitle}
+                      {$vo.fcontent}
+                    </p>
+                  </a>
+                {/volist}
+              </div>
+          </div>
+
+          <div class="col-xs-4">
+              <div class="thumbnail">
+
+                <div class="form-group">
+                  <div class="input-group">
+                      <div class="">  </div>
+                  </div>
+                  <div class="input-group">
+                      <span class="input-group-addon" id="basic-addon2" onclick="tse()" > {php}echo session('name');{/php} </span>
+                      <a href="{:url('index/unses')}"><div class=""> 退出 </div> </a>
+                  </div>
+                  <div class="input-group">
+                    <a href="{:url('index/inlog')}">
+                      <span class="input-group-addon" id="basic-addon2"  > 写日志 </span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+          </div>
+
+        </div>
+
+      </div>
+
+
+
+
+  </body>
+</html>
+<script type="text/javascript" src="__PUBLIC__/static/lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">
+  function aa(){
+    url = "{:url('index/unset')}";
+    $.ajax({
+      url:url,
+      type:"json",
+      data:sename,
+      success:function(success){
+        alert();
+      }
+    });
+  }
+</script>
