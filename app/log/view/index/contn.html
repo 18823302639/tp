@@ -3,7 +3,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title></title>
+    <title>  </title>
     <link rel="stylesheet" type="text/css" media="screen" href="https://cdn.bootcss.com/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"  crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"  crossorigin="anonymous">
@@ -13,14 +13,75 @@
   </head>
   <body>
     <div class="container text-center">
-      {volist name="res" id="vo"}
+
+
       <div class="row">
-          <h3> {$vo.ftitle} 作者：{$vo.fuser} 时间：{$vo.ftime} </h3>
+        {volist name="res" id="vo"}
+          <h3> 标题：{$vo.us_title}  </h3>
+          <h3>  作者：{$vo.user_name} 时间：{$vo.us_time} </h3>
           <div class="col-xs-12">
-            <div class="cont ">555</div>
+            <div class="cont ">{$vo.us_content}</div>
+            <div class="" onclick="fn()">
+              点击回复
+            </div>
           </div>
+          
+        {/volist}
       </div>
-      {/volist}
+      <div class="row">
+
+
+
+      </div>
+      <div class="row" style="display:none;" id="csan">
+          <form class=""  id="csfn" >
+            <textarea style="width:1150px;height:100px;" id="fcontent" class="form-control"  placeholder="写点什么吧！" name="us_content">  </textarea>
+            用户id：<input type="text" name="us_id" value="{$vo.uid}">
+            子id：<input type="text" name="p_id" value="{$vo.id}" >
+
+            <button class="" type="" onclick="dj()" >
+              提交
+            </button>
+          </form>
+
+      </div>
+
     </div>
   </body>
 </html>
+<script type="text/javascript" src="__PUBLIC__/static/lib/jquery/1.9.1/jquery.min.js"></script>
+<script charset="utf-8" src="__PUBLIC__/static/kindeditor/kindeditor-all.js"></script>
+<script charset="utf-8" src="__PUBLIC__/static/kindeditor/kindeditor-all-min.js"></script>
+<script charset="utf-8" src="__PUBLIC__/static/kindeditor/zh-CN.js"></script>
+<script type="text/javascript">
+    function fn(){
+      $("#csan").css("display","block");
+    }
+    function dj(){
+      editor.sync(); //获取不到kindEditor 内容，添加 editor.sync() 同步数据后可以直接取得textarea的value
+      url = "{:url('index/hf')}";
+      formlize = $("#csfn").serialize(); //获取form表单的值
+      //data = $("#fcontent").val();
+      $.ajax({
+        type:'POST',
+        url:url,
+        data:formlize,
+        success:function(success){
+
+          alert("添加成功");
+
+        },
+        error:function(error){
+          alert("添加失败");
+
+        }
+      });
+    }
+</script>
+<script>
+  KindEditor.ready(function(K) {
+          window.editor = K.create('#fcontent');
+
+  });
+
+</script>

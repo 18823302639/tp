@@ -8,12 +8,13 @@ use think\Model;
 
 class Mlog extends Model
 {
+
     //查找用户id
     public function fid(){
       $se_name = session('name');
-      $arr = Db::table('fname')
-                ->field('id')
-                ->where('fuser',$se_name)
+      $arr = Db::table('users')
+                ->field('uid')
+                ->where('user_name',$se_name)
                 ->find();
       return $arr;
     }
@@ -23,10 +24,10 @@ class Mlog extends Model
       $user = new Mlog();
       $u = $user->fid();
       $data = input('post.');
-      $arr = Db::table('f_journal')->where('fid',$u['id'])->order('ftime desc')->find();
+      $arr = Db::table('user_content')->where('us_id',$u['uid'])->order('us_time desc')->find();
       $time = date("Y-m-d H:i:s",time());
       $timeb = mb_substr($time,0,10);
-      $ftimeb = mb_substr($arr['ftime'],0,10);
+      $ftimeb = mb_substr($arr['us_time'],0,10);
       if($ftimeb == $timeb){
         return 1;
       }else{
@@ -39,11 +40,31 @@ class Mlog extends Model
         $user = new Mlog();
         $u = $user->fid();
         $data = input("post.");
-        $data['fid'] = $u['id'];
-        $data['ftime'] = date("Y-m-d H-i-s",time());
-        $res = Db::table('f_journal')->fetchSql(false)->insert($data);
+        $data['us_id'] = $u['uid'];
+        $data['us_time'] = date("Y-m-d H-i-s",time());
+        $res = Db::table('user_content')->fetchSql(false)->insert($data);
         return $res;
     }
+
+    //查看日志详情
+    public function conten($id){
+      $res = Db::table('user_content')
+                ->alias("us_co")
+                ->join("users u","u.uid = us_co.us_id")
+                ->field("u.*,us_co.*")
+                ->fetchSql(false)
+                ->where("us_co.id",$id)
+                ->select();
+      return $res;
+
+    }
+
+    //无限级分类
+    public function sele(){
+
+    }
+
+
 
 
 }

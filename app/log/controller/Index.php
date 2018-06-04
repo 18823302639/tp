@@ -19,6 +19,7 @@ class Index extends Controller
     //前置操作
     protected $beforeActionList = [
         'f_time'  =>  ['only'=>'inlog'],
+
     ];
 
     //首页
@@ -26,7 +27,7 @@ class Index extends Controller
     {
       $data = input('post.');
       if( session('?name') ){
-        $res = Db::table('f_journal')->select();
+        $res = Db::table('user_content')->select();
         $this->assign('res',$res);
         return view();
       }else{
@@ -38,50 +39,26 @@ class Index extends Controller
     //日志详情
     public function contn($id){
       //$res = Db::table('f_journal')->fetchSql(false)->where('id',$id)->select();
-      $res = Db::table('f_journal')
-                ->alias('fj')
-                ->join('fname fn','fj.fid=fn.id')
-                ->field('fj.*,fn.fuser')
-                ->where('fj.id',$id)
-                ->fetchSql(false)
-                ->select();
+      $user = new Mlog();
+      $res = $user->conten($id);
       $this->assign('res',$res);
       return view();
     }
 
-    //登录
-    public function login(){
-      if( request()->isPost() ){
+    //回复日志
+    public function hf(){
+      if( request()->isPost()){
         $data = input('post.');
-        $res = Db::table('fname')
-                  ->where('fuser',$data['fuser'])
-                  ->where('fpwssd',$data['fpwssd'])
-                  ->select();
+        $data['us_time'] = date("Y-m-d H-i-s",time());
+        $res = Db::table('user_content')->fetchSql(false)->insert($data);
         if($res){
-          session("name",$data['fuser']);
-          $this->success("登录成功","index/index");
+          return true;
         }else{
-          $this->error("用户名或者密码不对，请重新登陆","index/login");
+          return false;
         }
       }
-      return view();
     }
 
-    //注册
-    public function log(){
-
-      if( request()->isPost() ){
-        $data = input('post.');
-        $res = Db::name('fname')->insert($data);
-        if($res){
-
-          $this->success("登录成功","index/index");
-        }else{
-          $this->error("登录失败","index/login");
-        }
-      }
-      return view();
-    }
 
     //判断时间
     public function f_time(){
@@ -103,6 +80,40 @@ class Index extends Controller
           $this->success("提交成功","index/index");
         }else{
           $this->error("提交失败");
+        }
+      }
+      return view();
+    }
+
+    //登录
+    public function login(){
+      if( request()->isPost() ){
+        $data = input('post.');
+        $res = Db::table('users')
+                  ->where('user_name',$data['user_name'])
+                  ->where('user_pwd',$data['user_pwd'])
+                  ->select();
+        if($res){
+          session("name",$data['user_name']);
+          $this->success("登录成功","index/index");
+        }else{
+          $this->error("用户名或者密码不对，请重新登陆","index/login");
+        }
+      }
+      return view();
+    }
+
+    //注册
+    public function log(){
+
+      if( request()->isPost() ){
+        $data = input('post.');
+        $res = Db::name('users')->insert($data);
+        if($res){
+
+          $this->success("登录成功","index/index");
+        }else{
+          $this->error("登录失败","index/login");
         }
       }
       return view();

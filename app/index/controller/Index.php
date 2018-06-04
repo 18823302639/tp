@@ -19,7 +19,6 @@ class Index extends Controller
       //if($data['sub']){
         $arr = Db::table("username")->select();
         shuffle($arr);
-
         $this->assign("arr",$arr);
       //}
       return view();
@@ -164,6 +163,6 @@ class Index extends Controller
         $objWriter->save('php://output');
     }
 
-  
+
 
 }
