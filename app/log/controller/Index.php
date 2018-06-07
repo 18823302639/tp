@@ -18,7 +18,7 @@ class Index extends Controller
 
     //前置操作
     protected $beforeActionList = [
-        'f_time'  =>  ['only'=>'inlog'],
+        'f_time'  =>  ['only'=>'inlog']
 
     ];
 
@@ -27,7 +27,7 @@ class Index extends Controller
     {
       $data = input('post.');
       if( session('?name') ){
-        $res = Db::table('user_content')->select();
+        $res = Db::table('user_content')->where('p_id',0)->order('us_time desc')->select();
         $this->assign('res',$res);
         return view();
       }else{
@@ -36,20 +36,23 @@ class Index extends Controller
       return view();
     }
 
+
     //日志详情
     public function contn($id){
       //$res = Db::table('f_journal')->fetchSql(false)->where('id',$id)->select();
       $user = new Mlog();
-      $res = $user->conten($id);
-      $this->assign('res',$res);
-      return view();
+      $arr = $user->conten($id);
+      $this->assign('res',$arr);
+      return $this->fetch();
     }
 
-    //回复日志
-    public function hf(){
+    //回复日志判断用户，不能自己回复自己
+    public function q_hf(){
+
       if( request()->isPost()){
+
         $data = input('post.');
-        $data['us_time'] = date("Y-m-d H-i-s",time());
+
         $res = Db::table('user_content')->fetchSql(false)->insert($data);
         if($res){
           return true;
@@ -57,6 +60,30 @@ class Index extends Controller
           return false;
         }
       }
+
+    }
+
+    //回复日志
+    public function hf(){
+
+      $user = new Mlog();
+      $arr = $user->fid();
+
+      if( request()->isPost()){
+
+        $data = input('post.');
+        print_r($data);exit;
+        $data['us_time'] = date("Y-m-d H-i-s",time());
+
+        $res = Db::table('user_content')->fetchSql(false)->insert($data);
+
+        if($res){
+          return true;
+        }else{
+          return false;
+        }
+      }
+
     }
 
 

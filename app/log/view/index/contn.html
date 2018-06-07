@@ -14,7 +14,6 @@
   <body>
     <div class="container text-center">
 
-
       <div class="row">
         {volist name="res" id="vo"}
           <h3> 标题：{$vo.us_title}  </h3>
@@ -25,7 +24,7 @@
               点击回复
             </div>
           </div>
-          
+
         {/volist}
       </div>
       <div class="row">
@@ -37,8 +36,8 @@
           <form class=""  id="csfn" >
             <textarea style="width:1150px;height:100px;" id="fcontent" class="form-control"  placeholder="写点什么吧！" name="us_content">  </textarea>
             用户id：<input type="text" name="us_id" value="{$vo.uid}">
-            子id：<input type="text" name="p_id" value="{$vo.id}" >
 
+            子id：<input type="text" name="p_id" value="{$vo.id}" >
             <button class="" type="" onclick="dj()" >
               提交
             </button>
@@ -67,7 +66,7 @@
         url:url,
         data:formlize,
         success:function(success){
-
+          alert(success);
           alert("添加成功");
 
         },
