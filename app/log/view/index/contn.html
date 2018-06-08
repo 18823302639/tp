@@ -22,7 +22,7 @@
           <div class="col-xs-12">
             <div class="cont ">{$vo.us_content}</div>
           </div>
-          <div class="" onclick="fn()">
+          <div class="" onclick="fn({$vo.id})">
             点击回复
           </div>
         {/volist}
@@ -32,7 +32,7 @@
           <div class="col-xs-12">
             <div class="cont ">{$vo.us_content}</div>
           </div>
-          <div class="" onclick="fn()">
+          <div class="" onclick="fn({$vo.id})">
             点击回复
           </div>
         {/volist}
@@ -44,7 +44,7 @@
       <div class="row" style="display:none;" id="csan">
           <form class=""  id="csfn" >
             <textarea style="width:1150px;height:100px;" id="fcontent" class="form-control"  placeholder="写点什么吧！" name="us_content">  </textarea>
-            
+            被回复id： <input type="text" name="p_id" value="">
             用户id：<input type="text" name="us_id" value="{$vo.uid}">
             <button class="" type="" onclick="dj()" >
               提交
@@ -62,9 +62,12 @@
 <script charset="utf-8" src="__PUBLIC__/static/kindeditor/zh-CN.js"></script>
 <script type="text/javascript">
     function fn(a){
+
       $("#csan").css("display","block");
+      $(input['name=p_id']).val(a);
     }
     function dj(){
+
       editor.sync();  //获取不到kindEditor 内容，添加 editor.sync() 同步数据后可以直接取得textarea的value
       url = "{:url('index/hf')}";
 
