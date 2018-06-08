@@ -12,13 +12,15 @@ class Index extends Controller
 
     //构造函数
     public function __construct(){
+
       parent::__construct();
 
     }
 
     //前置操作
     protected $beforeActionList = [
-        'f_time'  =>  ['only'=>'inlog']
+
+      //  'f_time'  =>  ['only'=>'inlog']
 
     ];
 
@@ -27,7 +29,13 @@ class Index extends Controller
     {
       $data = input('post.');
       if( session('?name') ){
-        $res = Db::table('user_content')->where('p_id',0)->order('us_time desc')->select();
+        $res = Db::table('user_content')
+                  ->alias("us_co")
+                  ->join("users us","us_co.us_id = us.uid")
+                  ->fetchSql(false)
+                  ->where('p_id',0)
+                  ->order('us_time desc')
+                  ->select();
         $this->assign('res',$res);
         return view();
       }else{
@@ -72,7 +80,7 @@ class Index extends Controller
       if( request()->isPost()){
 
         $data = input('post.');
-        print_r($data);exit;
+        //print_r($data);exit;
         $data['us_time'] = date("Y-m-d H-i-s",time());
 
         $res = Db::table('user_content')->fetchSql(false)->insert($data);
@@ -86,16 +94,23 @@ class Index extends Controller
 
     }
 
-
     //判断时间
     public function f_time(){
+
       if(request()->isPost()){
+
         $user = new Mlog();
+
         $obj = $user->mf_time();
+
         if($obj == 1 ){
+
           $this->error("一天只能提交一次","index/index");
+
         }
+
       }
+
     }
 
     ///写日志

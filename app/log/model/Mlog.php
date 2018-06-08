@@ -68,7 +68,7 @@ class Mlog extends Model
 
       foreach($data as $k=>$v){
 
-          if($id == $v['id']){
+          if( $id == $v['id'] ){
 
               $arr[] = $v;
               $res = Db::table('user_content')
@@ -85,9 +85,12 @@ class Mlog extends Model
 
               }
 
+
           }
 
       }
+      //echo "<pre>";
+      //print_r($arr);
 
       return $arr;
 
