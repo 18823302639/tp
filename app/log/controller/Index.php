@@ -47,10 +47,11 @@ class Index extends Controller
 
     //日志详情
     public function contn($id){
-      //$res = Db::table('f_journal')->fetchSql(false)->where('id',$id)->select();
+      $res = Db::table('user_content')->fetchSql(false)->where('id',$id)->select();
       $user = new Mlog();
       $arr = $user->conten($id);
-      $this->assign('res',$arr);
+      $this->assign("res",$res);
+      $this->assign('arr',$arr);
       return $this->fetch();
     }
 

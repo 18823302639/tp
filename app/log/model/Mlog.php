@@ -45,58 +45,93 @@ class Mlog extends Model
         $res = Db::table('user_content')->fetchSql(false)->insert($data);
         return $res;
     }
+      /*
+      //查看日志详情
+      public function conten($id){
+        //先查询选中的数据信息
+        $res = Db::table('user_content')
+                  ->alias("us_co")
+                  ->join("users u","u.uid = us_co.us_id")
+                  ->field("u.*,us_co.*")
+                  ->fetchSql(false)
+                  ->where("us_co.id",$id)
+                  ->select();
 
-    //查看日志详情
-    public function conten($id){
-
-      $res = Db::table('user_content')
-                ->alias("us_co")
-                ->join("users u","u.uid = us_co.us_id")
-                ->field("u.*,us_co.*")
-                ->fetchSql(false)
-                ->where("us_co.id",$id)
-                ->select();
-
-      return $this->sele($res,$id);
-
-    }
-
-    //无限级分类
-    public function sele($data,$id){
-
-      static $arr = array();
-
-      foreach($data as $k=>$v){
-
-          if( $id == $v['id'] ){
-
-              $arr[] = $v;
-              $res = Db::table('user_content')
-                        ->alias("us_co")
-                        ->join("users u","u.uid = us_co.us_id")
-                        ->field("u.*,us_co.*")
-                        ->fetchSql(false)
-                        ->where("us_co.p_id",$id)
-                        ->select();
-
-              foreach($res as $key=>$val){
-
-                $arr[] = $val;
-
-              }
-
-
-          }
+        return $this->sele($res,$id);
 
       }
-      //echo "<pre>";
-      //print_r($arr);
 
-      return $arr;
+      //无限级分类
+      public function sele($data,$id){
+        //定义一个静态变量
+        static $arr = array();
 
-    }
+        foreach($data as $k=>$v){
+
+            if( $id == $v['id'] ){
+
+                $arr[] = $v;
+                $res = Db::table('user_content')
+                          ->alias("us_co")
+                          ->join("users u","u.uid = us_co.us_id")
+                          ->field("u.*,us_co.*")
+                          ->fetchSql(false)
+                          ->where("us_co.p_id",$id)
+                          ->select();
 
 
+                foreach($res as $key=>$val){
+
+                  $arr[] = $val;
+
+                }
+
+
+            }
+
+        }
+
+        return $arr;
+
+      }
+      */
+
+      public function conten($id){
+
+          //$res = Db::table('user_content')->select();
+          $res = Db::table('user_content')
+                    ->alias('us_co')
+                    ->join('users us','us.uid = us_co.us_id')
+                    ->field("*")
+                    ->select();
+          //return $res;
+          return $this->sele($res,$id);
+
+      }
+
+      public function sele($data,$id){
+          static $arr = array();
+          //$res = Db::table('user_content')->select();
+
+          foreach($data as $k=>$v){
+
+            if($id == $v['p_id']){
+              $arr[] = $v;
+              $res = Db::table('user_content')
+                        ->alias('us_co')
+                        ->join('users us','us.uid = us_co.us_id')
+                        ->field('*')
+                        ->fetchSql(false)
+                        ->where('id',$id)
+                        ->select();
+
+              $this->sele($data,$v['id']);
+            }
+
+          }
+          return $arr;
+
+      }
 
 
 }
